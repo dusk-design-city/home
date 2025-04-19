@@ -4,197 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dusk | Urban Nightlife Intelligence</title>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap');
-    
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    
-    body {
-        font-family: 'Space Grotesk', sans-serif;
-        background: linear-gradient(135deg, #0f1423 0%, #272b4d 100%);
-        color: #ffffff;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        animation: strobeEffect 8s infinite alternate;
-    }
-    
-    @keyframes strobeEffect {
-        0% {
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
             background: linear-gradient(135deg, #0f1423 0%, #272b4d 100%);
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
         }
-        50% {
-            background: linear-gradient(135deg, #131a2e 0%, #2d3258 100%);
+        
+        .strobe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
         }
-        100% {
-            background: linear-gradient(135deg, #0c1019 0%, #1e2340 100%);
+        
+        .container {
+            text-align: center;
+            max-width: 90%;
+            position: relative;
+            z-index: 2;
         }
-    }
-    
-    .container {
-        text-align: center;
-        max-width: 90%;
-        position: relative;
-        z-index: 1;
-    }
-    
-    .logo {
-        margin-bottom: 2rem;
-        font-weight: 700;
-        font-size: 4rem;
-        letter-spacing: 2px;
-        color: #ffffff;
-    }
-    
-    .tagline {
-        font-size: 1.5rem;
-        font-weight: 300;
-        margin-bottom: 3rem;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-        line-height: 1.4;
-    }
-    
-    .highlight {
-        color: #f9c846;
-        font-weight: 500;
-    }
-    
-    .signup {
-        margin-top: 2rem;
-    }
-    
-    input {
-        padding: 1rem;
-        width: 300px;
-        max-width: 100%;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
-        border-radius: 4px;
-        font-family: inherit;
-        margin-right: 0.5rem;
-    }
-    
-    button {
-        padding: 1rem 1.5rem;
-        background: #f9c846;
-        color: #0f1423;
-        border: none;
-        border-radius: 4px;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: inherit;
-        transition: all 0.3s ease;
-    }
-    
-    button:hover {
-        background: #ffffff;
-    }
-    
-    .city-lights {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 30%;
-        background: radial-gradient(
-            ellipse at center,
-            rgba(255, 255, 255, 0.05) 0%,
-            rgba(255, 255, 255, 0) 70%
-        );
-        z-index: 0;
-        animation: cityPulse 5s infinite;
-    }
-    
-    @keyframes cityPulse {
-        0% {
-            opacity: 0.4;
-            height: 30%;
-        }
-        50% {
-            opacity: 0.6;
-            height: 32%;
-        }
-        100% {
-            opacity: 0.4;
-            height: 30%;
-        }
-    }
-    
-    .footer {
-        position: absolute;
-        bottom: 2rem;
-        width: 100%;
-        text-align: center;
-        font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.5);
-    }
-    
-    @media (max-width: 768px) {
+        
         .logo {
-            font-size: 3rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            font-size: 4rem;
+            letter-spacing: 2px;
+            color: #ffffff;
         }
         
         .tagline {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
+        }
+        
+        .highlight {
+            color: #f9c846;
+            font-weight: 500;
         }
         
         .signup {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin-top: 2rem;
         }
         
         input {
-            margin-right: 0;
-            margin-bottom: 1rem;
+            padding: 1rem;
+            width: 300px;
+            max-width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 4px;
+            font-family: inherit;
+            margin-right: 0.5rem;
         }
-    }
-</style>
-
-<script>
-    function randomStrobe() {
-        const overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
-        overlay.style.pointerEvents = 'none';
-        overlay.style.zIndex = '999';
-        overlay.style.opacity = '0';
-        overlay.style.transition = 'opacity 0.2s ease-in-out';
         
-        document.body.appendChild(overlay);
+        button {
+            padding: 1rem 1.5rem;
+            background: #f9c846;
+            color: #0f1423;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
         
-        setTimeout(() => {
-            overlay.style.opacity = '1';
-            setTimeout(() => {
-                overlay.style.opacity = '0';
-                setTimeout(() => {
-                    document.body.removeChild(overlay);
-                }, 300);
-            }, 100);
-        }, 10);
+        button:hover {
+            background: #ffffff;
+        }
         
-        setTimeout(randomStrobe, 2000 + Math.random() * 5000);
-    }
-    
-    // Start after page load
-    window.addEventListener('load', () => setTimeout(randomStrobe, 3000));
-</script>
+        .city-lights {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            z-index: 0;
+        }
+        
+        .city-grid {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 217, 102, 0.05) 1px, transparent 1px),
+                radial-gradient(circle at 30% 40%, rgba(255, 217, 102, 0.03) 1px, transparent 1px),
+                radial-gradient(circle at 50% 60%, rgba(255, 217, 102, 0.05) 1px, transparent 1px),
+                radial-gradient(circle at 70% 30%, rgba(255, 217, 102, 0.03) 1px, transparent 1px),
+                radial-gradient(circle at 90% 50%, rgba(255, 217, 102, 0.05) 1px, transparent 1px);
+            background-size: 100px 100px;
+            opacity: 0.7;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: center bottom;
+        }
+        
+        .light-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                ellipse at center,
+                rgba(255, 255, 255, 0.05) 0%,
+                rgba(255, 255, 255, 0) 70%
+            );
+            animation: cityPulse 7s infinite;
+        }
+        
+        @keyframes cityPulse {
+            0% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 0.7;
+            }
+            100% {
+                opacity: 0.4;
+            }
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 2rem;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .signup {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            input {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="city-lights"></div>
+    <div class="strobe-container" id="strobeContainer"></div>
+    
+    <div class="city-lights">
+        <div class="city-grid"></div>
+        <div class="light-pulse"></div>
+    </div>
     
     <div class="container">
         <div class="logo">DUSK</div>
@@ -212,5 +203,114 @@
     <div class="footer">
         Launching Summer 2025
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create strobe container
+            const strobeContainer = document.getElementById('strobeContainer');
+            
+            // Function to create a strobe effect with improved visual appeal
+            function createStrobe() {
+                // Create strobe element
+                const strobe = document.createElement('div');
+                strobe.style.position = 'absolute';
+                strobe.style.top = '0';
+                strobe.style.left = '0';
+                strobe.style.width = '100%';
+                strobe.style.height = '100%';
+                strobe.style.backgroundColor = '#ffffff';
+                strobe.style.opacity = '0';
+                
+                // Add to container
+                strobeContainer.appendChild(strobe);
+                
+                // Random opacity for natural look
+                const maxOpacity = 0.05 + (Math.random() * 0.08);
+                
+                // Animation
+                setTimeout(() => {
+                    strobe.style.transition = 'opacity 20ms ease-in';
+                    strobe.style.opacity = maxOpacity;
+                    
+                    setTimeout(() => {
+                        strobe.style.transition = 'opacity 200ms ease-out';
+                        strobe.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            strobeContainer.removeChild(strobe);
+                        }, 300);
+                    }, 40);
+                }, 10);
+            }
+            
+            // Function to simulate distant lightning flashes
+            function createLightningFlash() {
+                // Add flash effect to background
+                const lightning = document.createElement('div');
+                lightning.style.position = 'fixed';
+                lightning.style.top = '0';
+                lightning.style.left = '0';
+                lightning.style.width = '100%';
+                lightning.style.height = '100%';
+                lightning.style.background = 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%)';
+                lightning.style.opacity = '0';
+                lightning.style.zIndex = '0';
+                
+                document.body.appendChild(lightning);
+                
+                // Smoother flash animation
+                setTimeout(() => {
+                    lightning.style.transition = 'opacity 50ms ease-in';
+                    lightning.style.opacity = '1';
+                    
+                    setTimeout(() => {
+                        lightning.style.transition = 'opacity 500ms ease-out';
+                        lightning.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            document.body.removeChild(lightning);
+                        }, 600);
+                    }, 60);
+                }, 10);
+            }
+            
+            // Function to dynamically adjust background
+            function pulseBackground() {
+                const body = document.body;
+                const currentAngle = Math.floor(Math.random() * 360);
+                const nextAngle = (currentAngle + 10) % 360;
+                
+                body.style.transition = 'background 8s ease';
+                body.style.background = `linear-gradient(${currentAngle}deg, #0f1423 0%, #272b4d 100%)`;
+                
+                setTimeout(() => {
+                    body.style.background = `linear-gradient(${nextAngle}deg, #0f1423 0%, #272b4d 100%)`;
+                }, 10);
+            }
+            
+            // Combine all effects to create nightlife ambiance
+            function simulateNightlifeEffects() {
+                // More realistic frequency patterns
+                if (Math.random() < 0.3) {
+                    createStrobe();
+                }
+                
+                if (Math.random() < 0.05) {
+                    createLightningFlash();
+                }
+                
+                if (Math.random() < 0.02) {
+                    pulseBackground();
+                }
+                
+                // Randomize timing
+                const nextEffectTime = 800 + (Math.random() * 2000);
+                setTimeout(simulateNightlifeEffects, nextEffectTime);
+            }
+            
+            // Start the effects
+            setTimeout(simulateNightlifeEffects, 1000);
+        });
+    </script>
 </body>
 </html>
