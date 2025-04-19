@@ -15,7 +15,7 @@
         
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background: linear-gradient(135deg, #0f1423 0%, #272b4d 100%);
+            background: #0f1423;
             color: #ffffff;
             height: 100vh;
             display: flex;
@@ -23,17 +23,6 @@
             align-items: center;
             overflow: hidden;
             position: relative;
-        }
-        
-        .strobe-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0;
         }
         
         .container {
@@ -49,6 +38,7 @@
             font-size: 4rem;
             letter-spacing: 2px;
             color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
         
         .tagline {
@@ -124,30 +114,6 @@
             transform-origin: center bottom;
         }
         
-        .light-pulse {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(
-                ellipse at center,
-                rgba(255, 255, 255, 0.05) 0%,
-                rgba(255, 255, 255, 0) 70%
-            );
-            animation: cityPulse 7s infinite;
-        }
-        
-        @keyframes cityPulse {
-            0% {
-                opacity: 0.4;
-            }
-            50% {
-                opacity: 0.7;
-            }
-            100% {
-                opacity: 0.4;
-            }
-        }
-        
         .footer {
             position: absolute;
             bottom: 2rem;
@@ -155,6 +121,20 @@
             text-align: center;
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Overlay div for strobing effect */
+        #strobeOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none; /* Allow clicks to pass through */
+            mix-blend-mode: overlay; /* This will create a more visually interesting effect */
+            opacity: 0;
+            transition: opacity 200ms ease;
         }
         
         @media (max-width: 768px) {
@@ -180,11 +160,11 @@
     </style>
 </head>
 <body>
-    <div class="strobe-container" id="strobeContainer"></div>
+    <!-- This div will have the strobing background -->
+    <div id="strobeOverlay"></div>
     
     <div class="city-lights">
         <div class="city-grid"></div>
-        <div class="light-pulse"></div>
     </div>
     
     <div class="container">
@@ -206,110 +186,99 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Create strobe container
-            const strobeContainer = document.getElementById('strobeContainer');
+            // Get the strobe overlay element
+            const strobeOverlay = document.getElementById('strobeOverlay');
             
-            // Function to create a strobe effect with improved visual appeal
-            function createStrobe() {
-                // Create strobe element
-                const strobe = document.createElement('div');
-                strobe.style.position = 'absolute';
-                strobe.style.top = '0';
-                strobe.style.left = '0';
-                strobe.style.width = '100%';
-                strobe.style.height = '100%';
-                strobe.style.backgroundColor = '#ffffff';
-                strobe.style.opacity = '0';
+            // Define a limited color palette - deep club colors, fewer options
+            // Just two primary colors with variations for a more cohesive look
+            const colors = [
+                'rgba(64, 0, 128, 0.4)',    // Deep purple (primary)
+                'rgba(90, 0, 180, 0.5)',    // Brighter purple (variation)
+                'rgba(0, 64, 128, 0.4)',    // Deep blue (primary)
+                'rgba(0, 90, 180, 0.5)'     // Brighter blue (variation)
+            ];
+            
+            // We'll create a techno beat pattern
+            // Typical techno is around 120-140 BPM
+            // At 130 BPM, that's about 460ms per beat
+            const beatInterval = 462; // ms (130 BPM)
+            
+            // Create a simple pattern for 4/4 techno
+            // 1 = accent beat (stronger flash)
+            // 0.5 = mid beat (medium flash)
+            // 0.2 = subtle beat (background pulse)
+            // 0 = no flash
+            const beatPattern = [
+                1, 0, 0.5, 0,   // 1st measure
+                0.5, 0, 0.5, 0,  // 2nd measure
+                0.8, 0, 0.5, 0,  // 3rd measure
+                0.5, 0.2, 0.5, 1 // 4th measure
+            ];
+            
+            let currentBeat = 0;
+            let isRunning = true;
+            
+            // Function to play the beat pattern
+            function playBeat() {
+                if (!isRunning) return;
                 
-                // Add to container
-                strobeContainer.appendChild(strobe);
+                const beatStrength = beatPattern[currentBeat];
                 
-                // Random opacity for natural look
-                const maxOpacity = 0.05 + (Math.random() * 0.08);
-                
-                // Animation
-                setTimeout(() => {
-                    strobe.style.transition = 'opacity 20ms ease-in';
-                    strobe.style.opacity = maxOpacity;
+                if (beatStrength > 0) {
+                    // Choose color based on position in pattern
+                    // Even beats use blue palette, odd beats use purple
+                    const colorIndex = currentBeat % 2 === 0 ? 
+                                      (beatStrength > 0.7 ? 3 : 2) : // Blue colors
+                                      (beatStrength > 0.7 ? 1 : 0);  // Purple colors
                     
-                    setTimeout(() => {
-                        strobe.style.transition = 'opacity 200ms ease-out';
-                        strobe.style.opacity = '0';
-                        
-                        setTimeout(() => {
-                            strobeContainer.removeChild(strobe);
-                        }, 300);
-                    }, 40);
-                }, 10);
-            }
-            
-            // Function to simulate distant lightning flashes
-            function createLightningFlash() {
-                // Add flash effect to background
-                const lightning = document.createElement('div');
-                lightning.style.position = 'fixed';
-                lightning.style.top = '0';
-                lightning.style.left = '0';
-                lightning.style.width = '100%';
-                lightning.style.height = '100%';
-                lightning.style.background = 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%)';
-                lightning.style.opacity = '0';
-                lightning.style.zIndex = '0';
-                
-                document.body.appendChild(lightning);
-                
-                // Smoother flash animation
-                setTimeout(() => {
-                    lightning.style.transition = 'opacity 50ms ease-in';
-                    lightning.style.opacity = '1';
+                    // Set the color
+                    strobeOverlay.style.backgroundColor = colors[colorIndex];
                     
+                    // Set the intensity based on beat strength
+                    strobeOverlay.style.opacity = beatStrength * 0.7; // Scale down for subtlety
+                    
+                    // Duration of the flash is longer for accent beats, shorter for background pulses
+                    const flashDuration = beatStrength > 0.7 ? 100 : 50;
+                    
+                    // Start fade out
                     setTimeout(() => {
-                        lightning.style.transition = 'opacity 500ms ease-out';
-                        lightning.style.opacity = '0';
-                        
-                        setTimeout(() => {
-                            document.body.removeChild(lightning);
-                        }, 600);
-                    }, 60);
-                }, 10);
-            }
-            
-            // Function to dynamically adjust background
-            function pulseBackground() {
-                const body = document.body;
-                const currentAngle = Math.floor(Math.random() * 360);
-                const nextAngle = (currentAngle + 10) % 360;
-                
-                body.style.transition = 'background 8s ease';
-                body.style.background = `linear-gradient(${currentAngle}deg, #0f1423 0%, #272b4d 100%)`;
-                
-                setTimeout(() => {
-                    body.style.background = `linear-gradient(${nextAngle}deg, #0f1423 0%, #272b4d 100%)`;
-                }, 10);
-            }
-            
-            // Combine all effects to create nightlife ambiance
-            function simulateNightlifeEffects() {
-                // More realistic frequency patterns
-                if (Math.random() < 0.3) {
-                    createStrobe();
+                        strobeOverlay.style.opacity = 0;
+                    }, flashDuration);
                 }
                 
-                if (Math.random() < 0.05) {
-                    createLightningFlash();
-                }
+                // Move to next beat in pattern
+                currentBeat = (currentBeat + 1) % beatPattern.length;
                 
-                if (Math.random() < 0.02) {
-                    pulseBackground();
-                }
-                
-                // Randomize timing
-                const nextEffectTime = 800 + (Math.random() * 2000);
-                setTimeout(simulateNightlifeEffects, nextEffectTime);
+                // Continue the pattern
+                setTimeout(playBeat, beatInterval);
             }
             
-            // Start the effects
-            setTimeout(simulateNightlifeEffects, 1000);
+            // Start the beat pattern
+            setTimeout(playBeat, 1000); // Wait 1 second before starting
+            
+            // Every few bars, add a subtle background color change
+            function backgroundPulse() {
+                if (!isRunning) return;
+                
+                // Change background with a smooth transition
+                document.body.style.transition = 'background-color 5s ease';
+                
+                // Alternate between default dark blue and subtle purple tone
+                const isDefaultBackground = document.body.style.backgroundColor === '' || 
+                                           document.body.style.backgroundColor === '#0f1423';
+                
+                if (isDefaultBackground) {
+                    document.body.style.backgroundColor = '#16102a'; // Subtle purple dark background
+                } else {
+                    document.body.style.backgroundColor = '#0f1423'; // Original blue dark background
+                }
+                
+                // Change every 4 bars (16 beats)
+                setTimeout(backgroundPulse, beatInterval * 16);
+            }
+            
+            // Start the subtle background changes
+            setTimeout(backgroundPulse, beatInterval * 16); // After first 4 bars
         });
     </script>
 </body>
