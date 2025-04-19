@@ -148,7 +148,7 @@
             }
         }
 
-        /* Buildings */
+        /* Buildings - More cartoonish with rounded tops */
         .buildings {
             position: absolute;
             bottom: 0;
@@ -156,73 +156,90 @@
             width: 100%;
             height: 30%;
             z-index: 2;
+            display: flex;
+            justify-content: space-around; /* Distribute buildings evenly */
+            align-items: flex-end;
         }
 
         .building {
-            position: absolute;
+            position: relative;
             bottom: 0;
             background: rgba(15, 20, 35, 0.8);
             border-top: 1px solid rgba(249, 200, 70, 0.3);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 5px 5px 0 0; /* Slightly rounded base */
+            overflow: hidden; /* Clip windows within rounded shape */
         }
 
-        /* Windows - Enhanced for more pronounced effect */
+        .building::before {
+            content: '';
+            position: absolute;
+            top: -10px; /* Adjust for curve height */
+            left: 0;
+            right: 0;
+            height: 20px; /* Adjust for curve height */
+            background: inherit;
+            border-radius: 50%; /* Creates the rounded top */
+        }
+
+        /* Windows - Slightly larger and less uniform */
         .window {
             position: absolute;
-            width: 3px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
-            transition: all 0.3s ease-in-out; /* Smoother window transitions */
+            width: 4px; /* Slightly larger */
+            height: 5px; /* Slightly larger */
+            background: rgba(255, 255, 255, 0.7); /* Slightly dimmer base */
+            box-shadow: 0 0 3px rgba(255, 255, 255, 0.5); /* Dimmer glow */
+            transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            border-radius: 1px; /* Soften the edges */
         }
 
         /* Different window states */
         .window.on {
-            background: rgba(255, 255, 255, 1);
-            box-shadow: 0 0 8px rgba(255, 220, 130, 0.9);
+            background: rgba(255, 255, 200, 1); /* Warmer light */
+            box-shadow: 0 0 6px rgba(255, 255, 200, 0.8); /* Warmer glow */
             opacity: 1;
         }
 
         .window.dimmed {
-            background: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
-            opacity: 0.5;
+            background: rgba(255, 255, 200, 0.4);
+            box-shadow: 0 0 2px rgba(255, 255, 200, 0.3);
+            opacity: 0.6;
         }
 
         .window.off {
-            background: rgba(180, 180, 180, 0.2);
+            background: rgba(150, 150, 150, 0.1);
             box-shadow: none;
-            opacity: 0.1;
+            opacity: 0.2;
         }
 
         /* Randomly blinking window animation */
         @keyframes windowBlink {
             0%, 100% {
-                opacity: 0.7;
+                opacity: 0.8;
             }
             50% {
                 opacity: 1;
             }
         }
 
-        /* Distant lights */
+        /* Distant lights - Softer and slightly larger */
         .light {
             position: absolute;
-            width: 1px;
-            height: 1px;
-            background: #f9c846;
+            width: 2px; /* Slightly larger */
+            height: 2px; /* Slightly larger */
+            background: #f9d470; /* Softer yellow */
             border-radius: 50%;
-            filter: blur(1px);
-            opacity: 0.7;
+            filter: blur(2px); /* More pronounced blur */
+            opacity: 0.6;
             animation: lightPulse 2s infinite;
         }
 
         @keyframes lightPulse {
             0%, 100% {
-                opacity: 0.4;
+                opacity: 0.3;
             }
             50% {
-                opacity: 0.8;
+                opacity: 0.7;
             }
         }
 
@@ -303,10 +320,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const dayStates = [
-                { name: "Midnight", color: "#0f1423", logoShadow: "0 0 15px rgba(255, 255, 255, 0.5)", windowState: "on" },
-                { name: "Early Dawn", color: "#1c2445", logoShadow: "0 0 10px rgba(255, 255, 255, 0.3)", windowState: "dimmed" },
-                { name: "Dawn", color: "#4a3b69", logoShadow: "none", windowState: "off" },
-                { name: "Dusk", color: "#2a2456", logoShadow: "0 0 20px rgba(249, 200, 70, 0.7)", windowState: "on" }
+                { name: "Midnight", color: "#0f1423", logoShadow: "0 0 15px rgba(255, 255, 255, 0.5)", windowState: "on", lightDelay: 0 },
+                { name: "Early Dawn", color: "#1c2445", logoShadow: "0 0 10px rgba(255, 255, 255, 0.3)", windowState: "dimmed", lightDelay: 500 },
+                { name: "Dawn", color: "#4a3b69", logoShadow: "none", windowState: "off", lightDelay: 1000 },
+                { name: "Dusk", color: "#2a2456", logoShadow: "0 0 20px rgba(249, 200, 70, 0.7)", windowState: "on", lightDelay: 1500 }
             ];
 
             const skyElement = document.getElementById('sky');
@@ -333,7 +350,11 @@
                 logoElement.style.textShadow = timeState.logoShadow;
 
                 timeLabel.textContent = timeState.name;
-                updateAllWindows(timeState.windowState);
+
+                // Introduce a delay before updating window states
+                setTimeout(() => {
+                    updateAllWindows(timeState.windowState);
+                }, timeState.lightDelay);
 
                 setTimeout(() => {
                     currentTimeIndex = (currentTimeIndex + 1) % dayStates.length;
@@ -356,15 +377,16 @@
             }
 
             const buildingsContainer = document.getElementById('buildings');
-            const numberOfBuildings = 30;
+            const numberOfBuildings = 15; // Reduced number for a more stylized look
 
             for (let i = 0; i < numberOfBuildings; i++) {
                 const building = document.createElement('div');
                 building.className = 'building';
 
-                const width = 10 + Math.random() * 30;
-                const height = 20 + Math.random() * 100;
-                const left = (i / numberOfBuildings) * 110 - 5;
+                // More varied and cartoonish dimensions
+                const width = 20 + Math.random() * 50;
+                const height = 50 + Math.random() * 150;
+                const left = (i / numberOfBuildings) * 100 + Math.random() * (100 / numberOfBuildings) - width / 2; // Spread with some randomness
 
                 building.style.width = `${width}px`;
                 building.style.height = `${height}px`;
@@ -372,33 +394,41 @@
 
                 buildingsContainer.appendChild(building);
 
-                const windowCount = Math.floor((height / 7) * (width / 7));
+                const windowRows = Math.floor(height / 15);
+                const windowsPerRow = Math.floor(width / 8);
 
-                for (let j = 0; j < windowCount; j++) {
-                    if (Math.random() > 0.3) {
-                        const windowEl = document.createElement('div');
-                        windowEl.className = 'window off';
-                        const windowLeft = Math.random() * (width - 3);
-                        const windowBottom = Math.random() * (height - 4);
-                        windowEl.style.left = `${windowLeft}px`;
-                        windowEl.style.bottom = `${windowBottom}px`;
-                        const colorVar = Math.floor(Math.random() * 20);
-                        windowEl.style.backgroundColor = `rgba(${255-colorVar}, ${255-colorVar}, ${255-colorVar+10}, 0.9)`;
+                for (let row = 0; row < windowRows; row++) {
+                    for (let col = 0; col < windowsPerRow; col++) {
+                        if (Math.random() > 0.4) { // More empty windows for a less dense look
+                            const windowEl = document.createElement('div');
+                            windowEl.className = 'window off';
+                            const windowLeft = col * 8 + Math.random() * 3;
+                            const windowBottom = row * 15 + Math.random() * 3;
+                            windowEl.style.left = `${windowLeft}px`;
+                            windowEl.style.bottom = `${windowBottom}px`;
+                            const colorVar = Math.floor(Math.random() * 30);
+                            windowEl.style.backgroundColor = `rgba(${230-colorVar}, ${230-colorVar}, ${200-colorVar+20}, 0.8)`; // Softer colors
+                            building.appendChild(windowEl);
+                        }
                         building.appendChild(windowEl);
+                        }
                     }
                 }
             }
 
             const addLights = () => {
                 const cityViz = document.querySelector('.city-visualization');
-                for (let i = 0; i < 50; i++) {
+                for (let i = 0; i < 30; i++) { // Reduced number for a less cluttered look
                     const light = document.createElement('div');
                     light.className = 'light';
                     const left = Math.random() * 100;
-                    const bottom = 10 + Math.random() * 30;
+                    const bottom = 10 + Math.random() * 40; // Spread higher up
+                    const size = 1 + Math.random() * 2; // Slightly more variation in size
+                    light.style.width = `${size}px`;
+                    light.style.height = `${size}px`;
                     light.style.left = `${left}%`;
                     light.style.bottom = `${bottom}%`;
-                    const pulseSpeed = 1 + Math.random() * 5;
+                    const pulseSpeed = 1.5 + Math.random() * 3; // Slightly different pulse speeds
                     light.style.animation = `lightPulse ${pulseSpeed}s infinite`;
                     cityViz.appendChild(light);
                 }
