@@ -4,132 +4,194 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dusk | Urban Nightlife Intelligence</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Space Grotesk', sans-serif;
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap');
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Space Grotesk', sans-serif;
+        background: linear-gradient(135deg, #0f1423 0%, #272b4d 100%);
+        color: #ffffff;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        animation: strobeEffect 8s infinite alternate;
+    }
+    
+    @keyframes strobeEffect {
+        0% {
             background: linear-gradient(135deg, #0f1423 0%, #272b4d 100%);
-            color: #ffffff;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
         }
-        
-        .container {
-            text-align: center;
-            max-width: 90%;
-            position: relative;
-            z-index: 1;
+        50% {
+            background: linear-gradient(135deg, #131a2e 0%, #2d3258 100%);
         }
-        
+        100% {
+            background: linear-gradient(135deg, #0c1019 0%, #1e2340 100%);
+        }
+    }
+    
+    .container {
+        text-align: center;
+        max-width: 90%;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .logo {
+        margin-bottom: 2rem;
+        font-weight: 700;
+        font-size: 4rem;
+        letter-spacing: 2px;
+        color: #ffffff;
+    }
+    
+    .tagline {
+        font-size: 1.5rem;
+        font-weight: 300;
+        margin-bottom: 3rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.4;
+    }
+    
+    .highlight {
+        color: #f9c846;
+        font-weight: 500;
+    }
+    
+    .signup {
+        margin-top: 2rem;
+    }
+    
+    input {
+        padding: 1rem;
+        width: 300px;
+        max-width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 4px;
+        font-family: inherit;
+        margin-right: 0.5rem;
+    }
+    
+    button {
+        padding: 1rem 1.5rem;
+        background: #f9c846;
+        color: #0f1423;
+        border: none;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.3s ease;
+    }
+    
+    button:hover {
+        background: #ffffff;
+    }
+    
+    .city-lights {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 30%;
+        background: radial-gradient(
+            ellipse at center,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0) 70%
+        );
+        z-index: 0;
+        animation: cityPulse 5s infinite;
+    }
+    
+    @keyframes cityPulse {
+        0% {
+            opacity: 0.4;
+            height: 30%;
+        }
+        50% {
+            opacity: 0.6;
+            height: 32%;
+        }
+        100% {
+            opacity: 0.4;
+            height: 30%;
+        }
+    }
+    
+    .footer {
+        position: absolute;
+        bottom: 2rem;
+        width: 100%;
+        text-align: center;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    @media (max-width: 768px) {
         .logo {
-            margin-bottom: 2rem;
-            font-weight: 700;
-            font-size: 4rem;
-            letter-spacing: 2px;
-            color: #ffffff;
+            font-size: 3rem;
         }
         
         .tagline {
-            font-size: 1.5rem;
-            font-weight: 300;
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.4;
-        }
-        
-        .highlight {
-            color: #f9c846;
-            font-weight: 500;
+            font-size: 1.2rem;
         }
         
         .signup {
-            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         input {
-            padding: 1rem;
-            width: 300px;
-            max-width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            border-radius: 4px;
-            font-family: inherit;
-            margin-right: 0.5rem;
+            margin-right: 0;
+            margin-bottom: 1rem;
         }
+    }
+</style>
+
+<script>
+    function randomStrobe() {
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+        overlay.style.pointerEvents = 'none';
+        overlay.style.zIndex = '999';
+        overlay.style.opacity = '0';
+        overlay.style.transition = 'opacity 0.2s ease-in-out';
         
-        button {
-            padding: 1rem 1.5rem;
-            background: #f9c846;
-            color: #0f1423;
-            border: none;
-            border-radius: 4px;
-            font-weight: 500;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
+        document.body.appendChild(overlay);
         
-        button:hover {
-            background: #ffffff;
-        }
+        setTimeout(() => {
+            overlay.style.opacity = '1';
+            setTimeout(() => {
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(overlay);
+                }, 300);
+            }, 100);
+        }, 10);
         
-        .city-lights {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 30%;
-            background: radial-gradient(
-                ellipse at center,
-                rgba(255, 255, 255, 0.05) 0%,
-                rgba(255, 255, 255, 0) 70%
-            );
-            z-index: 0;
-        }
-        
-        .footer {
-            position: absolute;
-            bottom: 2rem;
-            width: 100%;
-            text-align: center;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.5);
-        }
-        
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 3rem;
-            }
-            
-            .tagline {
-                font-size: 1.2rem;
-            }
-            
-            .signup {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            input {
-                margin-right: 0;
-                margin-bottom: 1rem;
-            }
-        }
-    </style>
+        setTimeout(randomStrobe, 2000 + Math.random() * 5000);
+    }
+    
+    // Start after page load
+    window.addEventListener('load', () => setTimeout(randomStrobe, 3000));
+</script>
 </head>
 <body>
     <div class="city-lights"></div>
