@@ -6,13 +6,13 @@
     <title>Dusk | Urban Nightlife Intelligence</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap');
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Space Grotesk', sans-serif;
             color: #ffffff;
@@ -21,16 +21,17 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            background-color: #0f1423;
+            background-color: #0f1423; /* Initial background */
+            transition: background-color 1s ease-in-out; /* Smooth background transition */
         }
-        
+
         .container {
             text-align: center;
             max-width: 90%;
             position: relative;
             z-index: 10;
         }
-        
+
         .logo {
             margin-bottom: 2rem;
             font-weight: 700;
@@ -38,8 +39,9 @@
             letter-spacing: 2px;
             color: #ffffff;
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transition: text-shadow 0.5s ease-in-out; /* Smooth logo effect */
         }
-        
+
         .tagline {
             font-size: 1.5rem;
             font-weight: 300;
@@ -49,17 +51,17 @@
             margin-right: auto;
             line-height: 1.4;
         }
-        
+
         .highlight {
             color: #f9c846;
             font-weight: 500;
             text-shadow: 0 0 10px rgba(249, 200, 70, 0.3);
         }
-        
+
         .signup {
             margin-top: 2rem;
         }
-        
+
         input {
             padding: 1rem;
             width: 300px;
@@ -71,7 +73,7 @@
             font-family: inherit;
             margin-right: 0.5rem;
         }
-        
+
         button {
             padding: 1rem 1.5rem;
             background: #f9c846;
@@ -81,13 +83,13 @@
             font-weight: 500;
             cursor: pointer;
             font-family: inherit;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
         }
-        
+
         button:hover {
             background: #ffffff;
         }
-        
+
         .footer {
             position: absolute;
             bottom: 2rem;
@@ -96,7 +98,7 @@
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.5);
         }
-        
+
         /* City Grid Visualization */
         .city-visualization {
             position: fixed;
@@ -108,8 +110,8 @@
             pointer-events: none;
             overflow: hidden;
         }
-        
-        /* Sky gradient */
+
+        /* Sky gradient - now a solid color transitioned by JavaScript */
         .sky {
             position: absolute;
             top: 0;
@@ -117,9 +119,10 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            transition: background 2s ease;
+            background-color: #0f1423; /* Initial sky color */
+            transition: background-color 1s ease-in-out; /* Smooth sky transition */
         }
-        
+
         /* Main Grid */
         .grid {
             position: absolute;
@@ -127,7 +130,7 @@
             left: 0;
             width: 200%;
             height: 70%;
-            background-image: 
+            background-image:
                 linear-gradient(rgba(249, 200, 70, 0.15) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(249, 200, 70, 0.15) 1px, transparent 1px);
             background-size: 40px 40px;
@@ -135,7 +138,7 @@
             transform-origin: center bottom;
             animation: gridMove 20s linear infinite;
         }
-        
+
         @keyframes gridMove {
             0% {
                 left: 0;
@@ -144,7 +147,7 @@
                 left: -100%;
             }
         }
-        
+
         /* Buildings */
         .buildings {
             position: absolute;
@@ -154,7 +157,7 @@
             height: 30%;
             z-index: 2;
         }
-        
+
         .building {
             position: absolute;
             bottom: 0;
@@ -162,7 +165,7 @@
             border-top: 1px solid rgba(249, 200, 70, 0.3);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
-        
+
         /* Windows - Enhanced for more pronounced effect */
         .window {
             position: absolute;
@@ -170,28 +173,28 @@
             height: 4px;
             background: rgba(255, 255, 255, 0.9);
             box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
-            transition: all 1.5s ease;
+            transition: all 0.3s ease-in-out; /* Smoother window transitions */
         }
-        
+
         /* Different window states */
         .window.on {
             background: rgba(255, 255, 255, 1);
             box-shadow: 0 0 8px rgba(255, 220, 130, 0.9);
             opacity: 1;
         }
-        
+
         .window.dimmed {
             background: rgba(255, 255, 255, 0.5);
             box-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
             opacity: 0.5;
         }
-        
+
         .window.off {
             background: rgba(180, 180, 180, 0.2);
             box-shadow: none;
             opacity: 0.1;
         }
-        
+
         /* Randomly blinking window animation */
         @keyframes windowBlink {
             0%, 100% {
@@ -201,7 +204,7 @@
                 opacity: 1;
             }
         }
-        
+
         /* Distant lights */
         .light {
             position: absolute;
@@ -213,7 +216,7 @@
             opacity: 0.7;
             animation: lightPulse 2s infinite;
         }
-        
+
         @keyframes lightPulse {
             0%, 100% {
                 opacity: 0.4;
@@ -222,7 +225,7 @@
                 opacity: 0.8;
             }
         }
-        
+
         /* Fog effect */
         .fog {
             position: absolute;
@@ -230,14 +233,14 @@
             left: 0;
             width: 100%;
             height: 30%;
-            background: linear-gradient(to top, 
-                rgba(15, 20, 35, 0.8) 0%, 
-                rgba(15, 20, 35, 0.5) 30%, 
-                rgba(15, 20, 35, 0.2) 70%, 
+            background: linear-gradient(to top,
+                rgba(15, 20, 35, 0.8) 0%,
+                rgba(15, 20, 35, 0.5) 30%,
+                rgba(15, 20, 35, 0.2) 70%,
                 rgba(15, 20, 35, 0) 100%);
             z-index: 3;
         }
-        
+
         /* Time indicator labels - invisible but used for debugging */
         .time-label {
             position: fixed;
@@ -248,22 +251,22 @@
             z-index: 20;
             opacity: 0;
         }
-        
+
         @media (max-width: 768px) {
             .logo {
                 font-size: 3rem;
             }
-            
+
             .tagline {
                 font-size: 1.2rem;
             }
-            
+
             .signup {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             input {
                 margin-right: 0;
                 margin-bottom: 1rem;
@@ -279,168 +282,130 @@
         <div class="fog"></div>
         <div class="time-label" id="timeLabel"></div>
     </div>
-    
+
     <div class="container">
         <div class="logo">DUSK</div>
         <div class="tagline">
             <span class="highlight">Illuminating the metrics of urban nightlife.</span><br>
             A data intelligence platform connecting policy, culture, and commerce after dark.
         </div>
-        
+
         <div class="signup">
             <input type="email" placeholder="Your email">
             <button>Stay informed</button>
         </div>
     </div>
-    
+
     <div class="footer">
         Launching Summer 2025
     </div>
 
     <script>
-        // Wait for the DOM to load
         document.addEventListener('DOMContentLoaded', function() {
-            // Simplified cycle with just 4 times of day
             const dayStates = [
-                { name: "Midnight", color: "#0f1423", windowState: "on" },      // Midnight - fully lit
-                { name: "Early Dawn", color: "#1c2445", windowState: "dimmed" }, // Early Dawn - dimmed
-                { name: "Dawn", color: "#4a3b69", windowState: "off" },         // Dawn - off
-                { name: "Dusk", color: "#2a2456", windowState: "on" }           // Dusk - fully lit
+                { name: "Midnight", color: "#0f1423", logoShadow: "0 0 15px rgba(255, 255, 255, 0.5)", windowState: "on" },
+                { name: "Early Dawn", color: "#1c2445", logoShadow: "0 0 10px rgba(255, 255, 255, 0.3)", windowState: "dimmed" },
+                { name: "Dawn", color: "#4a3b69", logoShadow: "none", windowState: "off" },
+                { name: "Dusk", color: "#2a2456", logoShadow: "0 0 20px rgba(249, 200, 70, 0.7)", windowState: "on" }
             ];
-            
-            // References to elements
+
             const skyElement = document.getElementById('sky');
             const timeLabel = document.getElementById('timeLabel');
-            
-            // Current time index
+            const logoElement = document.querySelector('.logo');
+
             let currentTimeIndex = 0;
-            
-            // Function to update the sky color and window states
+            const transitionDuration = 3000; // Duration of each state in milliseconds
+            const colorTransitionDuration = 1; // Duration of color transition in seconds
+
+            // Apply initial styles
+            skyElement.style.backgroundColor = dayStates[0].color;
+            logoElement.style.textShadow = dayStates[0].logoShadow;
+
             function updateTimeOfDay() {
-                // Get the current time configuration
                 const timeState = dayStates[currentTimeIndex];
-                
-                // Apply the background color with a transition
-                skyElement.style.background = timeState.color;
-                
-                // Update time label (invisible but useful for debugging)
+
+                // Apply the background color with a CSS transition
+                skyElement.style.transition = `background-color ${colorTransitionDuration}s ease-in-out`;
+                skyElement.style.backgroundColor = timeState.color;
+
+                // Apply the logo shadow with a CSS transition
+                logoElement.style.transition = `text-shadow ${colorTransitionDuration * 0.5}s ease-in-out`;
+                logoElement.style.textShadow = timeState.logoShadow;
+
                 timeLabel.textContent = timeState.name;
-                
-                // Update all windows based on current time
                 updateAllWindows(timeState.windowState);
-                
-                // Add subtle logo effect on color change
-                const logo = document.querySelector('.logo');
-                logo.style.transition = "text-shadow 1s ease";
-                
-                if (timeState.name === "Dusk") {
-                    logo.style.textShadow = "0 0 20px rgba(249, 200, 70, 0.7)";
-                } else {
-                    logo.style.textShadow = "0 0 15px rgba(255, 255, 255, 0.5)";
-                }
-                
-                // Move to next time after 3 seconds (all times equal duration)
+
                 setTimeout(() => {
                     currentTimeIndex = (currentTimeIndex + 1) % dayStates.length;
                     updateTimeOfDay();
-                }, 3000);
+                }, transitionDuration);
             }
-            
-            // Function to update all windows based on the current time state
+
             function updateAllWindows(state) {
                 const windows = document.querySelectorAll('.window');
-                
                 windows.forEach(window => {
-                    // Remove all states first
                     window.classList.remove('on', 'dimmed', 'off');
-                    
-                    // Apply the current state
                     window.classList.add(state);
-                    
-                    // For "on" state, add random blinking to some windows
+                    window.style.animation = 'none'; // Reset animation
+
                     if (state === 'on' && Math.random() > 0.7) {
                         const blinkSpeed = 2 + Math.random() * 8;
                         window.style.animation = `windowBlink ${blinkSpeed}s infinite`;
-                    } else {
-                        window.style.animation = 'none';
                     }
                 });
             }
-            
-            // Start the time cycle
-            updateTimeOfDay();
-            
-            // Generate buildings for the city skyline
+
             const buildingsContainer = document.getElementById('buildings');
             const numberOfBuildings = 30;
-            
-            // Create buildings
+
             for (let i = 0; i < numberOfBuildings; i++) {
                 const building = document.createElement('div');
                 building.className = 'building';
-                
-                // Random properties
+
                 const width = 10 + Math.random() * 30;
                 const height = 20 + Math.random() * 100;
-                const left = (i / numberOfBuildings) * 110 - 5; // Spread across and beyond viewport
-                
-                // Apply styles
+                const left = (i / numberOfBuildings) * 110 - 5;
+
                 building.style.width = `${width}px`;
                 building.style.height = `${height}px`;
                 building.style.left = `${left}%`;
-                
-                // Add to container
+
                 buildingsContainer.appendChild(building);
-                
-                // Add more windows for a denser effect
-                const windowCount = Math.floor((height / 7) * (width / 7)); // Increased window density
-                
+
+                const windowCount = Math.floor((height / 7) * (width / 7));
+
                 for (let j = 0; j < windowCount; j++) {
-                    if (Math.random() > 0.3) { // More windows (70% chance vs 30% empty)
+                    if (Math.random() > 0.3) {
                         const windowEl = document.createElement('div');
-                        windowEl.className = 'window off'; // Start with all off
-                        
-                        // Position window on building with slight randomization
+                        windowEl.className = 'window off';
                         const windowLeft = Math.random() * (width - 3);
                         const windowBottom = Math.random() * (height - 4);
-                        
                         windowEl.style.left = `${windowLeft}px`;
                         windowEl.style.bottom = `${windowBottom}px`;
-                        
-                        // Add subtle variation in window color
                         const colorVar = Math.floor(Math.random() * 20);
                         windowEl.style.backgroundColor = `rgba(${255-colorVar}, ${255-colorVar}, ${255-colorVar+10}, 0.9)`;
-                        
-                        // Add to building
                         building.appendChild(windowEl);
                     }
                 }
             }
-            
-            // Add distant lights in the background
+
             const addLights = () => {
+                const cityViz = document.querySelector('.city-visualization');
                 for (let i = 0; i < 50; i++) {
                     const light = document.createElement('div');
                     light.className = 'light';
-                    
-                    // Position light
                     const left = Math.random() * 100;
                     const bottom = 10 + Math.random() * 30;
-                    
                     light.style.left = `${left}%`;
                     light.style.bottom = `${bottom}%`;
-                    
-                    // Randomize pulsing
                     const pulseSpeed = 1 + Math.random() * 5;
                     light.style.animation = `lightPulse ${pulseSpeed}s infinite`;
-                    
-                    // Add to city
-                    document.querySelector('.city-visualization').appendChild(light);
+                    cityViz.appendChild(light);
                 }
             };
-            
-            // Initialize city elements
+
             addLights();
+            updateTimeOfDay();
         });
     </script>
 </body>
