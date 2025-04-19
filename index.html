@@ -15,21 +15,20 @@
         
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background: #0f1423;
             color: #ffffff;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            position: relative;
+            background-color: #0f1423;
         }
         
         .container {
             text-align: center;
             max-width: 90%;
             position: relative;
-            z-index: 2;
+            z-index: 10;
         }
         
         .logo {
@@ -38,7 +37,7 @@
             font-size: 4rem;
             letter-spacing: 2px;
             color: #ffffff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
         
         .tagline {
@@ -54,6 +53,7 @@
         .highlight {
             color: #f9c846;
             font-weight: 500;
+            text-shadow: 0 0 10px rgba(249, 200, 70, 0.3);
         }
         
         .signup {
@@ -88,32 +88,6 @@
             background: #ffffff;
         }
         
-        .city-lights {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 30%;
-            z-index: 0;
-        }
-        
-        .city-grid {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 30vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 217, 102, 0.05) 1px, transparent 1px),
-                radial-gradient(circle at 30% 40%, rgba(255, 217, 102, 0.03) 1px, transparent 1px),
-                radial-gradient(circle at 50% 60%, rgba(255, 217, 102, 0.05) 1px, transparent 1px),
-                radial-gradient(circle at 70% 30%, rgba(255, 217, 102, 0.03) 1px, transparent 1px),
-                radial-gradient(circle at 90% 50%, rgba(255, 217, 102, 0.05) 1px, transparent 1px);
-            background-size: 100px 100px;
-            opacity: 0.7;
-            transform: perspective(500px) rotateX(60deg);
-            transform-origin: center bottom;
-        }
-        
         .footer {
             position: absolute;
             bottom: 2rem;
@@ -123,18 +97,156 @@
             color: rgba(255, 255, 255, 0.5);
         }
         
-        /* Overlay div for strobing effect */
-        #strobeOverlay {
+        /* City Grid Visualization */
+        .city-visualization {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 1;
-            pointer-events: none; /* Allow clicks to pass through */
-            mix-blend-mode: overlay; /* This will create a more visually interesting effect */
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        /* Sky gradient */
+        .sky {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            transition: background 2s ease;
+        }
+        
+        /* Main Grid */
+        .grid {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 70%;
+            background-image: 
+                linear-gradient(rgba(249, 200, 70, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(249, 200, 70, 0.15) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(300px) rotateX(60deg);
+            transform-origin: center bottom;
+            animation: gridMove 20s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% {
+                left: 0;
+            }
+            100% {
+                left: -100%;
+            }
+        }
+        
+        /* Buildings */
+        .buildings {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            z-index: 2;
+        }
+        
+        .building {
+            position: absolute;
+            bottom: 0;
+            background: rgba(15, 20, 35, 0.8);
+            border-top: 1px solid rgba(249, 200, 70, 0.3);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Windows - Enhanced for more pronounced effect */
+        .window {
+            position: absolute;
+            width: 3px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
+            transition: all 1.5s ease;
+        }
+        
+        /* Different window states */
+        .window.on {
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 8px rgba(255, 220, 130, 0.9);
+            opacity: 1;
+        }
+        
+        .window.dimmed {
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
+            opacity: 0.5;
+        }
+        
+        .window.off {
+            background: rgba(180, 180, 180, 0.2);
+            box-shadow: none;
+            opacity: 0.1;
+        }
+        
+        /* Randomly blinking window animation */
+        @keyframes windowBlink {
+            0%, 100% {
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        
+        /* Distant lights */
+        .light {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: #f9c846;
+            border-radius: 50%;
+            filter: blur(1px);
+            opacity: 0.7;
+            animation: lightPulse 2s infinite;
+        }
+        
+        @keyframes lightPulse {
+            0%, 100% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+        
+        /* Fog effect */
+        .fog {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to top, 
+                rgba(15, 20, 35, 0.8) 0%, 
+                rgba(15, 20, 35, 0.5) 30%, 
+                rgba(15, 20, 35, 0.2) 70%, 
+                rgba(15, 20, 35, 0) 100%);
+            z-index: 3;
+        }
+        
+        /* Time indicator labels - invisible but used for debugging */
+        .time-label {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
+            z-index: 20;
             opacity: 0;
-            transition: opacity 200ms ease;
         }
         
         @media (max-width: 768px) {
@@ -160,11 +272,12 @@
     </style>
 </head>
 <body>
-    <!-- This div will have the strobing background -->
-    <div id="strobeOverlay"></div>
-    
-    <div class="city-lights">
-        <div class="city-grid"></div>
+    <div class="city-visualization">
+        <div class="sky" id="sky"></div>
+        <div class="grid"></div>
+        <div class="buildings" id="buildings"></div>
+        <div class="fog"></div>
+        <div class="time-label" id="timeLabel"></div>
     </div>
     
     <div class="container">
@@ -185,100 +298,149 @@
     </div>
 
     <script>
+        // Wait for the DOM to load
         document.addEventListener('DOMContentLoaded', function() {
-            // Get the strobe overlay element
-            const strobeOverlay = document.getElementById('strobeOverlay');
-            
-            // Define a limited color palette - deep club colors, fewer options
-            // Just two primary colors with variations for a more cohesive look
-            const colors = [
-                'rgba(64, 0, 128, 0.4)',    // Deep purple (primary)
-                'rgba(90, 0, 180, 0.5)',    // Brighter purple (variation)
-                'rgba(0, 64, 128, 0.4)',    // Deep blue (primary)
-                'rgba(0, 90, 180, 0.5)'     // Brighter blue (variation)
+            // Simplified cycle with just 4 times of day
+            const dayStates = [
+                { name: "Midnight", color: "#0f1423", windowState: "on" },      // Midnight - fully lit
+                { name: "Early Dawn", color: "#1c2445", windowState: "dimmed" }, // Early Dawn - dimmed
+                { name: "Dawn", color: "#4a3b69", windowState: "off" },         // Dawn - off
+                { name: "Dusk", color: "#2a2456", windowState: "on" }           // Dusk - fully lit
             ];
             
-            // We'll create a techno beat pattern
-            // Typical techno is around 120-140 BPM
-            // At 130 BPM, that's about 460ms per beat
-            const beatInterval = 462; // ms (130 BPM)
+            // References to elements
+            const skyElement = document.getElementById('sky');
+            const timeLabel = document.getElementById('timeLabel');
             
-            // Create a simple pattern for 4/4 techno
-            // 1 = accent beat (stronger flash)
-            // 0.5 = mid beat (medium flash)
-            // 0.2 = subtle beat (background pulse)
-            // 0 = no flash
-            const beatPattern = [
-                1, 0, 0.5, 0,   // 1st measure
-                0.5, 0, 0.5, 0,  // 2nd measure
-                0.8, 0, 0.5, 0,  // 3rd measure
-                0.5, 0.2, 0.5, 1 // 4th measure
-            ];
+            // Current time index
+            let currentTimeIndex = 0;
             
-            let currentBeat = 0;
-            let isRunning = true;
-            
-            // Function to play the beat pattern
-            function playBeat() {
-                if (!isRunning) return;
+            // Function to update the sky color and window states
+            function updateTimeOfDay() {
+                // Get the current time configuration
+                const timeState = dayStates[currentTimeIndex];
                 
-                const beatStrength = beatPattern[currentBeat];
+                // Apply the background color with a transition
+                skyElement.style.background = timeState.color;
                 
-                if (beatStrength > 0) {
-                    // Choose color based on position in pattern
-                    // Even beats use blue palette, odd beats use purple
-                    const colorIndex = currentBeat % 2 === 0 ? 
-                                      (beatStrength > 0.7 ? 3 : 2) : // Blue colors
-                                      (beatStrength > 0.7 ? 1 : 0);  // Purple colors
-                    
-                    // Set the color
-                    strobeOverlay.style.backgroundColor = colors[colorIndex];
-                    
-                    // Set the intensity based on beat strength
-                    strobeOverlay.style.opacity = beatStrength * 0.7; // Scale down for subtlety
-                    
-                    // Duration of the flash is longer for accent beats, shorter for background pulses
-                    const flashDuration = beatStrength > 0.7 ? 100 : 50;
-                    
-                    // Start fade out
-                    setTimeout(() => {
-                        strobeOverlay.style.opacity = 0;
-                    }, flashDuration);
-                }
+                // Update time label (invisible but useful for debugging)
+                timeLabel.textContent = timeState.name;
                 
-                // Move to next beat in pattern
-                currentBeat = (currentBeat + 1) % beatPattern.length;
+                // Update all windows based on current time
+                updateAllWindows(timeState.windowState);
                 
-                // Continue the pattern
-                setTimeout(playBeat, beatInterval);
-            }
-            
-            // Start the beat pattern
-            setTimeout(playBeat, 1000); // Wait 1 second before starting
-            
-            // Every few bars, add a subtle background color change
-            function backgroundPulse() {
-                if (!isRunning) return;
+                // Add subtle logo effect on color change
+                const logo = document.querySelector('.logo');
+                logo.style.transition = "text-shadow 1s ease";
                 
-                // Change background with a smooth transition
-                document.body.style.transition = 'background-color 5s ease';
-                
-                // Alternate between default dark blue and subtle purple tone
-                const isDefaultBackground = document.body.style.backgroundColor === '' || 
-                                           document.body.style.backgroundColor === '#0f1423';
-                
-                if (isDefaultBackground) {
-                    document.body.style.backgroundColor = '#16102a'; // Subtle purple dark background
+                if (timeState.name === "Dusk") {
+                    logo.style.textShadow = "0 0 20px rgba(249, 200, 70, 0.7)";
                 } else {
-                    document.body.style.backgroundColor = '#0f1423'; // Original blue dark background
+                    logo.style.textShadow = "0 0 15px rgba(255, 255, 255, 0.5)";
                 }
                 
-                // Change every 4 bars (16 beats)
-                setTimeout(backgroundPulse, beatInterval * 16);
+                // Move to next time after 3 seconds (all times equal duration)
+                setTimeout(() => {
+                    currentTimeIndex = (currentTimeIndex + 1) % dayStates.length;
+                    updateTimeOfDay();
+                }, 3000);
             }
             
-            // Start the subtle background changes
-            setTimeout(backgroundPulse, beatInterval * 16); // After first 4 bars
+            // Function to update all windows based on the current time state
+            function updateAllWindows(state) {
+                const windows = document.querySelectorAll('.window');
+                
+                windows.forEach(window => {
+                    // Remove all states first
+                    window.classList.remove('on', 'dimmed', 'off');
+                    
+                    // Apply the current state
+                    window.classList.add(state);
+                    
+                    // For "on" state, add random blinking to some windows
+                    if (state === 'on' && Math.random() > 0.7) {
+                        const blinkSpeed = 2 + Math.random() * 8;
+                        window.style.animation = `windowBlink ${blinkSpeed}s infinite`;
+                    } else {
+                        window.style.animation = 'none';
+                    }
+                });
+            }
+            
+            // Start the time cycle
+            updateTimeOfDay();
+            
+            // Generate buildings for the city skyline
+            const buildingsContainer = document.getElementById('buildings');
+            const numberOfBuildings = 30;
+            
+            // Create buildings
+            for (let i = 0; i < numberOfBuildings; i++) {
+                const building = document.createElement('div');
+                building.className = 'building';
+                
+                // Random properties
+                const width = 10 + Math.random() * 30;
+                const height = 20 + Math.random() * 100;
+                const left = (i / numberOfBuildings) * 110 - 5; // Spread across and beyond viewport
+                
+                // Apply styles
+                building.style.width = `${width}px`;
+                building.style.height = `${height}px`;
+                building.style.left = `${left}%`;
+                
+                // Add to container
+                buildingsContainer.appendChild(building);
+                
+                // Add more windows for a denser effect
+                const windowCount = Math.floor((height / 7) * (width / 7)); // Increased window density
+                
+                for (let j = 0; j < windowCount; j++) {
+                    if (Math.random() > 0.3) { // More windows (70% chance vs 30% empty)
+                        const windowEl = document.createElement('div');
+                        windowEl.className = 'window off'; // Start with all off
+                        
+                        // Position window on building with slight randomization
+                        const windowLeft = Math.random() * (width - 3);
+                        const windowBottom = Math.random() * (height - 4);
+                        
+                        windowEl.style.left = `${windowLeft}px`;
+                        windowEl.style.bottom = `${windowBottom}px`;
+                        
+                        // Add subtle variation in window color
+                        const colorVar = Math.floor(Math.random() * 20);
+                        windowEl.style.backgroundColor = `rgba(${255-colorVar}, ${255-colorVar}, ${255-colorVar+10}, 0.9)`;
+                        
+                        // Add to building
+                        building.appendChild(windowEl);
+                    }
+                }
+            }
+            
+            // Add distant lights in the background
+            const addLights = () => {
+                for (let i = 0; i < 50; i++) {
+                    const light = document.createElement('div');
+                    light.className = 'light';
+                    
+                    // Position light
+                    const left = Math.random() * 100;
+                    const bottom = 10 + Math.random() * 30;
+                    
+                    light.style.left = `${left}%`;
+                    light.style.bottom = `${bottom}%`;
+                    
+                    // Randomize pulsing
+                    const pulseSpeed = 1 + Math.random() * 5;
+                    light.style.animation = `lightPulse ${pulseSpeed}s infinite`;
+                    
+                    // Add to city
+                    document.querySelector('.city-visualization').appendChild(light);
+                }
+            };
+            
+            // Initialize city elements
+            addLights();
         });
     </script>
 </body>
