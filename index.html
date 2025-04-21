@@ -97,6 +97,27 @@
             color: rgba(255, 255, 255, 0.5);
         }
         
+        /* Form success/error message styling */
+        .form-message {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .form-success {
+            background: rgba(39, 174, 96, 0.2);
+            border: 1px solid rgba(39, 174, 96, 0.4);
+            color: #2ecc71;
+        }
+        
+        .form-error {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid rgba(231, 76, 60, 0.4);
+            color: #e74c3c;
+        }
+        
         /* City Grid Visualization */
         .city-visualization {
             position: fixed;
@@ -288,8 +309,12 @@
         </div>
         
         <div class="signup">
-            <input type="email" placeholder="Your email">
-            <button>Stay informed</button>
+            <form id="emailSignup" action="https://formspree.io/f/manowbbz" method="POST">
+                <input type="email" name="email" placeholder="Your email" required>
+                <button type="submit">Stay informed</button>
+                <div class="form-message form-success" id="formSuccess">Thanks! We'll keep you updated.</div>
+                <div class="form-message form-error" id="formError">Oops! Something went wrong.</div>
+            </form>
         </div>
     </div>
     
@@ -300,6 +325,64 @@
     <script>
         // Wait for the DOM to load
         document.addEventListener('DOMContentLoaded', function() {
+            // Form submission handling
+            const form = document.getElementById('emailSignup');
+            const successMessage = document.getElementById('formSuccess');
+            const errorMessage = document.getElementById('formError');
+            
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Get the form data
+                    const formData = new FormData(form);
+                    
+                    // Send the data to Formspree
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Show success message
+                            form.reset();
+                            successMessage.style.display = 'block';
+                            errorMessage.style.display = 'none';
+                            
+                            // Hide success message after 5 seconds
+                            setTimeout(() => {
+                                successMessage.style.display = 'none';
+                            }, 5000);
+                        } else {
+                            // Show error message
+                            errorMessage.style.display = 'block';
+                            successMessage.style.display = 'none';
+                            
+                            // Hide error message after 5 seconds
+                            setTimeout(() => {
+                                errorMessage.style.display = 'none';
+                            }, 5000);
+                            
+                            throw new Error('Form submission failed');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Show error message
+                        errorMessage.style.display = 'block';
+                        successMessage.style.display = 'none';
+                        
+                        // Hide error message after 5 seconds
+                        setTimeout(() => {
+                            errorMessage.style.display = 'none';
+                        }, 5000);
+                    });
+                });
+            }
+            
             // Simplified cycle with just 4 times of day
             const dayStates = [
                 { name: "Midnight", color: "#0f1423", windowState: "on" },      // Midnight - fully lit
